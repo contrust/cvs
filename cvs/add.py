@@ -3,7 +3,8 @@ from pathlib import Path
 
 from cvs.create_tree import create_tree
 from cvs.hash_object import Blob, Tree, HashObject
-from cvs.parse_tree import parse_tree
+from cvs.read_tree import read_tree
+from cvs.config import index_path
 
 
 def add(object_path: str) -> None:
@@ -14,11 +15,11 @@ def add(object_path: str) -> None:
             add_object = Blob(blob_file.read(), os.path.basename(object_path))
     if os.path.isdir(object_path):
         add_object = create_tree(object_path, os.path.basename(object_path))
-    with open('.cvs/index') as head_file:
+    with open(str(index_path)) as head_file:
         index_tree_hash = head_file.read()
-    index_tree = parse_tree(index_tree_hash) if index_tree_hash else Tree()
+    index_tree = read_tree(index_tree_hash) if index_tree_hash else Tree()
     index_tree = insert_hash_object(index_tree, add_object, Path(object_path).parts)
-    with open('.cvs/index', mode='w') as head_file:
+    with open(str(index_path), mode='w') as head_file:
         head_file.write(index_tree.hash())
 
 

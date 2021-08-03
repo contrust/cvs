@@ -3,6 +3,7 @@ import argparse
 
 from cvs.add import add
 from cvs.init import init
+from cvs.commit import commit
 
 
 def parse_arguments():
@@ -19,6 +20,9 @@ def parse_arguments():
     parser.add_argument('-add',
                         metavar='path',
                         help='updates file or folder of cvs index')
+    parser.add_argument('-commit',
+                        metavar='message',
+                        help='commit changes')
     return parser.parse_args()
 
 
@@ -32,6 +36,8 @@ def main():
             init()
         elif args_dict['add']:
             add(args_dict['add'])
+        elif args_dict['commit']:
+            commit(args_dict['commit'])
     except Exception as e:
         print(f"{type(e).__name__} at line"
               f" {e.__traceback__.tb_lineno} of {__file__}: {e}")
