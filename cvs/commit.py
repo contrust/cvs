@@ -45,3 +45,9 @@ def get_commit_tree_hash(commit_hash: str) -> str:
     with open(str(commits_path / commit_hash)) as commit_file:
         commit_match = COMMIT_REGEX.match(commit_file.read())
         return commit_match.group('tree_hash')
+
+
+def get_commit_parent_hash(commit_hash: str) -> str:
+    with open(str(commits_path / commit_hash)) as commit_file:
+        commit_match = COMMIT_REGEX.match(commit_file.read())
+        return commit_match.group('parent_hash')

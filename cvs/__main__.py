@@ -6,6 +6,7 @@ from cvs.branch import create_branch, branch_list
 from cvs.checkout import checkout
 from cvs.init import init
 from cvs.commit import commit, commit_list
+from cvs.log import log
 from cvs.status import status
 from cvs.tag import tag, tag_list
 
@@ -31,6 +32,9 @@ def parse_arguments():
     parser.add_argument('-commit',
                         metavar='message',
                         help='commit changes')
+    parser.add_argument('-log',
+                        action='store_true',
+                        help='show history of commits')
     parser.add_argument('--commit-list',
                         action='store_true',
                         help='show all commit names')
@@ -61,13 +65,15 @@ def main():
         args_dict = vars(parse_arguments())
         if args_dict['init']:
             init()
-        if args_dict['status']:
+        elif args_dict['status']:
             status()
-        if args_dict['commit_list']:
+        elif args_dict['log']:
+            log()
+        elif args_dict['commit_list']:
             commit_list()
-        if args_dict['tag_list']:
+        elif args_dict['tag_list']:
             tag_list()
-        if args_dict['branch_list']:
+        elif args_dict['branch_list']:
             branch_list()
         elif args_dict['add']:
             add(args_dict['add'])
