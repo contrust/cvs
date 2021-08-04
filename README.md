@@ -8,6 +8,8 @@ pip install .
 
 ## Usage
 
+All the commands should be run from directory where command 'init' was executed.
+
 | Command | Description |
 | --- | --- |
 | python3 -m cvs -h | Show help message |
