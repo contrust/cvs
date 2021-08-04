@@ -39,7 +39,7 @@ def parse_arguments():
                         metavar='name',
                         help='create branch attached to current commit')
     parser.add_argument('-checkout',
-                        metavar='tree_hash',
+                        metavar='name',
                         help='update files of working directory from '
                              'commit, tag or branch')
     parser.add_argument('-tag',
