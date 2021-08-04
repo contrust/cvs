@@ -24,33 +24,34 @@ def parse_arguments():
                         help='make .cvs folder for further work with cvs')
     parser.add_argument('-status',
                         action='store_true',
-                        help='show current current branch or commit '
+                        help='show current branch or commit '
                              'you are working on')
+    parser.add_argument('-log',
+                        action='store_true',
+                        help='show history of current commit')
     parser.add_argument('-add',
                         metavar='path',
-                        help='updates file or folder of cvs index')
+                        help='updates file or folder in cvs index')
     parser.add_argument('-commit',
                         metavar='message',
                         help='commit changes')
-    parser.add_argument('-log',
-                        action='store_true',
-                        help='show history of commits')
-    parser.add_argument('--commit-list',
-                        action='store_true',
-                        help='show all commit names')
-    parser.add_argument('-checkout',
-                        metavar='tree_hash',
-                        help='unload tree in current dir')
-    parser.add_argument('-tag',
-                        metavar='name message',
-                        help='create tag attached to current commit',
-                        nargs=2)
-    parser.add_argument('--tag-list',
-                        action='store_true',
-                        help='show all tag names')
     parser.add_argument('-branch',
                         metavar='name',
                         help='create branch attached to current commit')
+    parser.add_argument('-checkout',
+                        metavar='tree_hash',
+                        help='update files of working directory from '
+                             'commit, tag or branch')
+    parser.add_argument('-tag',
+                        metavar=('name', 'message'),
+                        help='create tag attached to current commit',
+                        nargs=2)
+    parser.add_argument('--commit-list',
+                        action='store_true',
+                        help='show all commit names')
+    parser.add_argument('--tag-list',
+                        action='store_true',
+                        help='show all tag names')
     parser.add_argument('--branch-list',
                         action='store_true',
                         help='show all branch names')
