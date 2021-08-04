@@ -1,4 +1,3 @@
-from pathlib import Path
 from cvs.config import *
 
 
@@ -17,4 +16,5 @@ def init():
     heads_refs_path.mkdir()
     index_path.write_bytes(b'')
     head_path.write_bytes(b'main')
+    (heads_refs_path / 'main').write_bytes(b'')
     print('CVS inited successfully.')

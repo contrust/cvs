@@ -3,7 +3,7 @@ from hashlib import sha1
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
-from cvs.branch import is_branch_exist, get_branch_commit_hash
+from cvs.branch import is_branch_exist, get_branch_content
 from cvs.config import objects_path
 from cvs.head import read_head
 from cvs.index import read_index
@@ -65,7 +65,7 @@ class Commit(HashObject):
 
     def __bytes__(self) -> bytes:
         head_content = read_head()
-        parent_hash = (get_branch_commit_hash(head_content)
+        parent_hash = (get_branch_content(head_content)
                        if is_branch_exist(head_content) else head_content)
         tree_hash = read_index()
         return f'Tree: {tree_hash}\n' \
@@ -82,7 +82,7 @@ class Tag(HashObject):
 
     def __bytes__(self):
         head_content = read_head()
-        commit_hash = (get_branch_commit_hash(head_content)
+        commit_hash = (get_branch_content(head_content)
                        if is_branch_exist(head_content) else head_content)
         return f'Commit: {commit_hash}\n' \
                f'Date: {self.time}\n\n' \

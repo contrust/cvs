@@ -6,13 +6,18 @@ from cvs.hash_object import Commit
 from cvs.head import write_head, read_head
 import re
 
+from cvs.index import read_index
+
 COMMIT_REGEX = re.compile(r'^Tree: (?P<tree_hash>\w{40})\n'
-                          r'Parent: (?P<parent_hash>\w{40})\n'
+                          r'Parent: (?P<parent_hash>(\w{40})?)\n'
                           r'Date: (?P<date>[^\n]*)\n\n'
                           r'(?P<message>.*)$', re.DOTALL | re.MULTILINE)
 
 
 def commit(message: str) -> None:
+    if not read_index():
+        print('Can not commit empty repository.')
+        return
     commit_hash = Commit(message).hash()
     if (is_branch_exist(branch_name := read_head()) or
             branch_name == 'main' and not os.listdir(str(heads_refs_path))):

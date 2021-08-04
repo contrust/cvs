@@ -2,7 +2,7 @@
 import argparse
 
 from cvs.add import add
-from cvs.branch import create_branch
+from cvs.branch import create_branch, branch_list
 from cvs.checkout import checkout
 from cvs.init import init
 from cvs.commit import commit, commit_list
@@ -47,6 +47,9 @@ def parse_arguments():
     parser.add_argument('-branch',
                         metavar='name',
                         help='create branch attached to current commit')
+    parser.add_argument('--branch-list',
+                        action='store_true',
+                        help='show all branch names')
     return parser.parse_args()
 
 
@@ -64,6 +67,8 @@ def main():
             commit_list()
         if args_dict['tag_list']:
             tag_list()
+        if args_dict['branch_list']:
+            branch_list()
         elif args_dict['add']:
             add(args_dict['add'])
         elif args_dict['commit']:

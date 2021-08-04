@@ -1,8 +1,11 @@
 import os
 
-from cvs.config import refs_path, tags_refs_path, tags_path, heads_refs_path
+from cvs.branch import get_branch_content
+from cvs.config import refs_path, tags_refs_path, tags_path
 from cvs.hash_object import Tag
 import re
+
+from cvs.head import read_head
 
 TAG_REGEX = re.compile(r'^Commit: (?P<commit_hash>\w{40})\n'
                        r'Date: (?P<date>[^\n]*)\n\n'
@@ -12,6 +15,9 @@ TAG_REGEX = re.compile(r'^Commit: (?P<commit_hash>\w{40})\n'
 def tag(name: str, message: str) -> None:
     if is_tag_exist(name):
         print('The tag with such name already exists.')
+        return
+    elif read_head() == 'main' and not get_branch_content('main'):
+        print('There is no commit to attach.')
         return
     tag_hash = Tag(message).hash()
     with open(str(refs_path / "tags" / name), mode='w') as head_file:

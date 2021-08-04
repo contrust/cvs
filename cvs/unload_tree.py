@@ -1,8 +1,7 @@
 from pathlib import Path
 
-from cvs.hash_object import Tree, Blob
+from cvs.hash_object import Tree
 import os
-from cvs.read_tree import read_tree
 
 
 def unload_tree(tree: Tree, tree_path: str):

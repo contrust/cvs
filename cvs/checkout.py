@@ -1,15 +1,19 @@
 import os.path
 
-from cvs.branch import is_branch_exist, get_branch_commit_hash
+from cvs.branch import is_branch_exist, get_branch_content
 from cvs.clean_directory import clean_directory
 from cvs.commit import get_commit_tree_hash, is_commit_exist
-from cvs.head import write_head
+from cvs.head import write_head, read_head
+from cvs.index import write_index
 from cvs.tag import is_tag_exist, get_tag_commit_hash
 from cvs.unload_tree import unload_tree
 from cvs.read_tree import read_tree
 
 
 def checkout(ref_name):
+    if read_head() == ref_name:
+        print(f'You are already on {ref_name}.')
+        return
     if is_commit_exist(ref_name):
         commit_hash = ref_name
         write_head(commit_hash)
@@ -17,7 +21,7 @@ def checkout(ref_name):
         commit_hash = get_tag_commit_hash(ref_name)
         write_head(commit_hash)
     elif is_branch_exist(ref_name):
-        commit_hash = get_branch_commit_hash(ref_name)
+        commit_hash = get_branch_content(ref_name)
         write_head(ref_name)
     else:
         print('There is no commit, tag or branch with such name.')
@@ -25,4 +29,5 @@ def checkout(ref_name):
     clean_directory('.')
     tree_hash = get_commit_tree_hash(commit_hash)
     unload_tree(read_tree(tree_hash), '.')
+    write_index(tree_hash)
     print(f'Successful checkout to {ref_name}')
