@@ -2,9 +2,11 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from hashlib import sha1
+from pathlib import Path
 
 from cvs.branch import is_branch_exist, get_branch_content
-from cvs.config import objects_path, head_path, index_path
+from cvs.config import head_path, index_path, trees_path, \
+    blobs_path, commits_path, tags_path
 
 
 def get_hash(data: bytes) -> str:
@@ -13,8 +15,8 @@ def get_hash(data: bytes) -> str:
 
 @dataclass
 class HashObject(ABC):
-    def __init__(self, folder_name=None):
-        self.folder_name = folder_name
+    def __init__(self, folder: Path = None):
+        self.folder = folder
 
     @abstractmethod
     def __bytes__(self) -> bytes:
@@ -25,15 +27,13 @@ class HashObject(ABC):
          return it's hash"""
         content = bytes(self)
         content_hash = get_hash(content)
-        with open(str(objects_path / self.folder_name / content_hash),
-                  mode='wb') as output_file:
-            output_file.write(content)
+        (self.folder / content_hash).write_bytes(content)
         return content_hash
 
 
 class Tree(HashObject):
     def __init__(self, name=None):
-        super().__init__("trees")
+        super().__init__(trees_path)
         self.name = name
         self.children = []
 
@@ -47,7 +47,7 @@ class Tree(HashObject):
 
 class Blob(HashObject):
     def __init__(self, data: bytes, name=None):
-        super().__init__("blobs")
+        super().__init__(blobs_path)
         self.name = name
         self.data = data
 
@@ -57,7 +57,7 @@ class Blob(HashObject):
 
 class Commit(HashObject):
     def __init__(self, message: str):
-        super().__init__("commits")
+        super().__init__(commits_path)
         self.message = message
         self.time = datetime.now(timezone.utc).strftime("%d/%b/%Y:%H:%M:%S %z")
 
@@ -74,7 +74,7 @@ class Commit(HashObject):
 
 class Tag(HashObject):
     def __init__(self, message: str):
-        super().__init__("tags")
+        super().__init__(tags_path)
         self.message = message
         self.time = datetime.now(timezone.utc).strftime("%d/%b/%Y:%H:%M:%S %z")
 
