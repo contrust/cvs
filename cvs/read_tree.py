@@ -13,7 +13,3 @@ def read_tree(tree_hash: str, tree_name: str = None) -> Tree:
             elif child_type == 'Tree':
                 tree.children.append(read_tree(child_hash, child_name))
     return tree
-
-
-if __name__ == '__main__':
-    pass

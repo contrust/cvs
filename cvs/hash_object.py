@@ -2,7 +2,11 @@ from abc import ABC, abstractmethod
 from hashlib import sha1
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from cvs.config import objects_path, index_path, head_path
+
+from cvs.branch import is_branch_exist, get_branch_commit_hash
+from cvs.config import objects_path
+from cvs.head import read_head
+from cvs.index import read_index
 
 
 def get_hash(data: bytes) -> str:
@@ -23,7 +27,8 @@ class HashObject(ABC):
          return it's hash"""
         content = bytes(self)
         content_hash = get_hash(content)
-        with open(str(objects_path / self.folder_name / content_hash), mode='wb') as output_file:
+        with open(str(objects_path / self.folder_name / content_hash),
+                  mode='wb') as output_file:
             output_file.write(content)
         return content_hash
 
@@ -59,11 +64,26 @@ class Commit(HashObject):
         self.time = datetime.now(timezone.utc).strftime("%d/%b/%Y:%H:%M:%S %z")
 
     def __bytes__(self) -> bytes:
-        with open(str(index_path)) as index_file:
-            with open(str(head_path)) as head_file:
-                parent_hash = head_file.read()
-                tree_hash = index_file.read()
-                return f'tree {tree_hash}\n' \
-                       f'parent {parent_hash}\n' \
-                       f'datetime {self.time}\n\n' \
-                       f'{self.message}'.encode('utf-8')
+        head_content = read_head()
+        parent_hash = (get_branch_commit_hash(head_content)
+                       if is_branch_exist(head_content) else head_content)
+        tree_hash = read_index()
+        return f'Tree: {tree_hash}\n' \
+               f'Parent: {parent_hash}\n' \
+               f'Date: {self.time}\n\n' \
+               f'{self.message}'.encode('utf-8')
+
+
+class Tag(HashObject):
+    def __init__(self, message: str):
+        super().__init__("tags")
+        self.message = message
+        self.time = datetime.now(timezone.utc).strftime("%d/%b/%Y:%H:%M:%S %z")
+
+    def __bytes__(self):
+        head_content = read_head()
+        commit_hash = (get_branch_commit_hash(head_content)
+                       if is_branch_exist(head_content) else head_content)
+        return f'Commit: {commit_hash}\n' \
+               f'Date: {self.time}\n\n' \
+               f'{self.message}'.encode('utf-8')

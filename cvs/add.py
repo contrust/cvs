@@ -21,6 +21,7 @@ def add(object_path: str) -> None:
     index_tree = insert_hash_object(index_tree, add_object, Path(object_path).parts)
     with open(str(index_path), mode='w') as head_file:
         head_file.write(index_tree.hash())
+    print(f'Successfully added changes of {object_path}')
 
 
 def insert_hash_object(tree: Tree, hash_object: HashObject, path_parts) -> Tree:
