@@ -1,12 +1,9 @@
 import os.path
-
-from cvs.branch import is_branch_exist
-from cvs.config import commits_path, heads_refs_path
-from cvs.hash_object import Commit
-from cvs.head import write_head, read_head
 import re
 
-from cvs.index import read_index
+from cvs.branch import is_branch_exist
+from cvs.config import commits_path, heads_refs_path, index_path, head_path
+from cvs.hash_object import Commit
 
 COMMIT_REGEX = re.compile(r'^Tree: (?P<tree_hash>\w{40})\n'
                           r'Parent: (?P<parent_hash>(\w{40})?)\n'
@@ -15,16 +12,15 @@ COMMIT_REGEX = re.compile(r'^Tree: (?P<tree_hash>\w{40})\n'
 
 
 def commit(message: str) -> None:
-    if not read_index():
+    if not index_path.read_text():
         print('Can not commit empty repository.')
         return
     commit_hash = Commit(message).hash()
-    if (is_branch_exist(branch_name := read_head()) or
+    if (is_branch_exist(branch_name := head_path.read_text()) or
             branch_name == 'main' and not os.listdir(str(heads_refs_path))):
-        with open(str(heads_refs_path / branch_name), mode='w') as branch_file:
-            branch_file.write(commit_hash)
+        (heads_refs_path / branch_name).write_text(commit_hash)
     else:
-        write_head(commit_hash)
+        head_path.write_text(commit_hash)
     print(f'Successful commit {commit_hash}')
 
 
@@ -42,12 +38,12 @@ def is_commit_exist(commit_hash: str) -> bool:
 
 
 def get_commit_tree_hash(commit_hash: str) -> str:
-    with open(str(commits_path / commit_hash)) as commit_file:
-        commit_match = COMMIT_REGEX.match(commit_file.read())
-        return commit_match.group('tree_hash')
+    commit_text = (commits_path / commit_hash).read_text()
+    commit_match = COMMIT_REGEX.match(commit_text)
+    return commit_match.group('tree_hash')
 
 
 def get_commit_parent_hash(commit_hash: str) -> str:
-    with open(str(commits_path / commit_hash)) as commit_file:
-        commit_match = COMMIT_REGEX.match(commit_file.read())
-        return commit_match.group('parent_hash')
+    commit_text = (commits_path / commit_hash).read_text()
+    commit_match = COMMIT_REGEX.match(commit_text)
+    return commit_match.group('parent_hash')

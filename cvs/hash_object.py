@@ -1,12 +1,10 @@
 from abc import ABC, abstractmethod
-from hashlib import sha1
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from hashlib import sha1
 
 from cvs.branch import is_branch_exist, get_branch_content
-from cvs.config import objects_path
-from cvs.head import read_head
-from cvs.index import read_index
+from cvs.config import objects_path, head_path, index_path
 
 
 def get_hash(data: bytes) -> str:
@@ -64,10 +62,10 @@ class Commit(HashObject):
         self.time = datetime.now(timezone.utc).strftime("%d/%b/%Y:%H:%M:%S %z")
 
     def __bytes__(self) -> bytes:
-        head_content = read_head()
+        head_content = head_path.read_text()
         parent_hash = (get_branch_content(head_content)
                        if is_branch_exist(head_content) else head_content)
-        tree_hash = read_index()
+        tree_hash = index_path.read_text()
         return f'Tree: {tree_hash}\n' \
                f'Parent: {parent_hash}\n' \
                f'Date: {self.time}\n\n' \
@@ -81,7 +79,7 @@ class Tag(HashObject):
         self.time = datetime.now(timezone.utc).strftime("%d/%b/%Y:%H:%M:%S %z")
 
     def __bytes__(self):
-        head_content = read_head()
+        head_content = head_path.read_text()
         commit_hash = (get_branch_content(head_content)
                        if is_branch_exist(head_content) else head_content)
         return f'Commit: {commit_hash}\n' \

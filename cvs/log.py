@@ -1,11 +1,10 @@
 from cvs.branch import get_branch_content, is_branch_exist
 from cvs.commit import get_commit_parent_hash
-from cvs.config import commits_path
-from cvs.head import read_head
+from cvs.config import commits_path, head_path
 
 
 def log():
-    head_content = read_head()
+    head_content = head_path.read_text()
     commit_hash = (get_branch_content(head_content)
                    if is_branch_exist(head_content) else head_content)
     while commit_hash:
