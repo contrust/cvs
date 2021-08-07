@@ -7,12 +7,25 @@ def create_branch(name: str):
     if is_branch_exist(name):
         print('The branch with such name already exists.')
         return
-    (heads_refs_path / name).write_text(head_path.read_text())
+    try:
+        head_content = head_path.read_text()
+    except FileNotFoundError:
+        print('Head file does not exist.')
+        return
+    try:
+        (heads_refs_path / name).write_text(head_content)
+    except FileNotFoundError:
+        print('Heads folder does not exist.')
+        return
     print(f'The branch {name} was successfully created.')
 
 
 def branch_list():
-    branch_names = os.listdir(str(heads_refs_path))
+    try:
+        branch_names = os.listdir(str(heads_refs_path))
+    except FileNotFoundError:
+        print('Branch folder does not exist.')
+        return
     if branch_names:
         for branch_name in branch_names:
             print(branch_name)

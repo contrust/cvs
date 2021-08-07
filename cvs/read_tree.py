@@ -3,8 +3,8 @@ from cvs.config import trees_path, blobs_path
 
 
 def read_tree(tree_hash: str) -> Tree:
-    tree = Tree()
     with open(str(trees_path / tree_hash)) as tree_file:
+        tree = Tree()
         for line in tree_file:
             child_type, child_hash, child_name = line.strip().split()
             if child_type == 'Blob':
@@ -13,4 +13,4 @@ def read_tree(tree_hash: str) -> Tree:
             elif child_type == 'Tree':
                 child_tree = read_tree(child_hash)
                 tree.children[child_name] = child_tree
-    return tree
+        return tree

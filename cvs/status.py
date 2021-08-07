@@ -6,7 +6,11 @@ from cvs.config import heads_refs_path, commits_path, head_path
 
 
 def status():
-    head_content = head_path.read_text()
+    try:
+        head_content = head_path.read_text()
+    except FileNotFoundError:
+        print('Head file does not exist.')
+        return
     if is_branch_exist(head_content):
         print(f'On {head_content} branch')
     elif is_commit_exist(head_content):

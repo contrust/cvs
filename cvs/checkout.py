@@ -7,8 +7,13 @@ from cvs.tag import is_tag_exist, get_tag_commit_hash
 from cvs.unload_tree import unload_tree
 
 
-def checkout(ref_name):
-    if head_path.read_text() == ref_name:
+def checkout(ref_name: str) -> None:
+    try:
+        head_content = head_path.read_text()
+    except FileNotFoundError:
+        print('Head file does not exist.')
+        return
+    if head_content == ref_name:
         print(f'You are already on {ref_name}.')
         return
     if is_commit_exist(ref_name):
@@ -23,8 +28,21 @@ def checkout(ref_name):
     else:
         print('There is no commit, tag or branch with such name.')
         return
+    try:
+        tree_hash = get_commit_tree_hash(commit_hash)
+    except AttributeError:
+        print(f'{commit_hash} file does not match the format.')
+        return
+    try:
+        tree = read_tree(tree_hash)
+    except FileNotFoundError:
+        print(f'The tree hash {tree_hash} does not exist.')
+        return
     clean_directory('.')
-    tree_hash = get_commit_tree_hash(commit_hash)
-    unload_tree(read_tree(tree_hash), '.')
-    index_path.write_text(tree_hash)
+    unload_tree(tree, '.')
+    try:
+        index_path.write_text(tree_hash)
+    except FileNotFoundError:
+        print('CVS index does not exist.')
+        return
     print(f'Successful checkout to {ref_name}')

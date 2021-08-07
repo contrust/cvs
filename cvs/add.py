@@ -16,14 +16,29 @@ def add(object_path: str) -> None:
     if os.path.isfile(object_path):
         with open(object_path, mode='rb') as blob_file:
             add_object = Blob(blob_file.read())
-            add_object.update_hash()
     elif os.path.isdir(object_path):
-        add_object = create_tree(object_path)
-    index_tree_hash = index_path.read_text()
-    index_tree = read_tree(index_tree_hash) if index_tree_hash else Tree()
+        try:
+            add_object = create_tree(object_path)
+        except FileNotFoundError:
+            print('Blobs folder does not exist.')
+            return
+    try:
+        index_tree_hash = index_path.read_text()
+    except FileNotFoundError:
+        print('Index file does not exist.')
+        return
+    try:
+        index_tree = read_tree(index_tree_hash) if index_tree_hash else Tree()
+    except FileNotFoundError:
+        print(f'Tree with {index_tree_hash} hash does not exist.')
+        return
     index_tree = insert_hash_object(index_tree, add_object,
                                     Path(object_path).parts)
-    index_path.write_text(index_tree.content_hash)
+    try:
+        index_path.write_text(index_tree.content_hash)
+    except FileNotFoundError:
+        print('Index file does not exist.')
+        return
     print(f'Successfully updated {object_path}')
 
 

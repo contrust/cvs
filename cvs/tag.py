@@ -14,11 +14,25 @@ def tag(name: str, message: str) -> None:
     if is_tag_exist(name):
         print('The tag with such name already exists.')
         return
-    elif head_path.read_text() == 'main' and not get_branch_content('main'):
+    try:
+        head_content = head_path.read_text()
+    except FileNotFoundError:
+        print('Head file does not exist.')
+        return
+    try:
+        branch_content = get_branch_content('main')
+    except FileNotFoundError:
+        print('Branch folder does not exist.')
+        return
+    if head_content == 'main' and not branch_content:
         print('There is no commit to attach.')
         return
     tag_hash = Tag(message).update_hash()
-    (refs_path / "tags" / name).write_text(tag_hash)
+    try:
+        (refs_path / "tags" / name).write_text(tag_hash)
+    except FileNotFoundError:
+        print('Can not create tag because CVS tags folder does not exist.')
+        return
     print(f'The tag {name} was successfully created.')
 
 
