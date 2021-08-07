@@ -8,7 +8,9 @@ pip install .
 
 ## Usage
 
-All the commands should be run from directory where command 'init' was executed.
+* Firstly, you should install cvs with 'pip install .'.
+* Secondly, in your working directory you should execute 'python3 -m cvs -init' in terminal.
+* After that, all the commands should be run from the same directory.
 
 | Command | Description |
 | --- | --- |
