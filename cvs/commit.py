@@ -15,7 +15,7 @@ def commit(message: str) -> None:
     if not index_path.read_text():
         print('Can not commit empty repository.')
         return
-    commit_hash = Commit(message).hash()
+    commit_hash = Commit(message).update_hash()
     if (is_branch_exist(branch_name := head_path.read_text()) or
             branch_name == 'main' and not os.listdir(str(heads_refs_path))):
         (heads_refs_path / branch_name).write_text(commit_hash)

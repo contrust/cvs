@@ -17,8 +17,9 @@ def tag(name: str, message: str) -> None:
     elif head_path.read_text() == 'main' and not get_branch_content('main'):
         print('There is no commit to attach.')
         return
-    tag_hash = Tag(message).hash()
+    tag_hash = Tag(message).update_hash()
     (refs_path / "tags" / name).write_text(tag_hash)
+    print(f'The tag {name} was successfully created.')
 
 
 def tag_list():

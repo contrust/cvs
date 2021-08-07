@@ -3,17 +3,18 @@ import os
 from cvs.hash_object import Blob, Tree
 
 
-def create_tree(tree_path: str, tree_name: str = None) -> str:
-    tree = Tree(tree_name)
-    for children_name in sorted(os.listdir(tree_path)):
-        if children_name[0] != '.':
-            children_path = os.path.join(tree_path, children_name)
+def create_tree(tree_path: str) -> Tree:
+    tree = Tree()
+    for child_name in sorted(os.listdir(tree_path)):
+        if child_name[0] != '.':
+            children_path = os.path.join(tree_path, child_name)
             if os.path.isfile(children_path):
                 with open(children_path, mode='rb') as blob_file:
-                    children_blob = Blob(blob_file.read(), children_name)
-                    tree.children.append(children_blob)
+                    child_blob = Blob(blob_file.read())
+                    child_blob.update_hash()
+                    tree.children[child_name] = child_blob
             elif os.path.isdir(children_path):
-                children_tree = create_tree(children_path, children_name)
-                tree.children.append(children_tree)
-    tree.hash()
+                child_tree = create_tree(children_path)
+                tree.children[child_name] = child_tree
+    tree.update_hash()
     return tree
