@@ -35,8 +35,8 @@ def checkout(ref_name: str) -> None:
         return
     try:
         tree = read_tree(tree_hash)
-    except FileNotFoundError:
-        print(f'The tree {tree_hash} does not exist.')
+    except (FileNotFoundError, AttributeError):
+        print(f'Error occurred while reading tree {tree_hash}')
         return
     clean_directory('.')
     unload_tree(tree, '.')

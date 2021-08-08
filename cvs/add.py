@@ -29,8 +29,8 @@ def add(object_path: str) -> None:
         return
     try:
         index_tree = read_tree(index_tree_hash) if index_tree_hash else Tree()
-    except FileNotFoundError:
-        print(f'The tree {index_tree_hash} does not exist.')
+    except (FileNotFoundError, AttributeError):
+        print(f'Error occurred while reading tree {index_tree_hash}')
         return
     try:
         index_tree = insert_hash_object(index_tree, add_object,
