@@ -12,7 +12,7 @@ TAG_REGEX = re.compile(r'^Commit: (?P<commit_hash>\w{40})\n'
 
 def tag(name: str, message: str) -> None:
     if is_tag_exist(name):
-        print('The tag with such name already exists.')
+        print(f'The tag {name} already exists.')
         return
     try:
         head_content = head_path.read_text()
@@ -31,7 +31,7 @@ def tag(name: str, message: str) -> None:
     try:
         (refs_path / "tags" / name).write_text(tag_hash)
     except FileNotFoundError:
-        print('Can not create tag because CVS tags folder does not exist.')
+        print('Tags folder does not exist.')
         return
     print(f'The tag {name} was successfully created.')
 

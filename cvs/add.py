@@ -30,10 +30,14 @@ def add(object_path: str) -> None:
     try:
         index_tree = read_tree(index_tree_hash) if index_tree_hash else Tree()
     except FileNotFoundError:
-        print(f'Tree with {index_tree_hash} hash does not exist.')
+        print(f'The tree {index_tree_hash} does not exist.')
         return
-    index_tree = insert_hash_object(index_tree, add_object,
-                                    Path(object_path).parts)
+    try:
+        index_tree = insert_hash_object(index_tree, add_object,
+                                        Path(object_path).parts)
+    except FileNotFoundError:
+        print('Trees folder does not exist.')
+        return
     try:
         index_path.write_text(index_tree.content_hash)
     except FileNotFoundError:
@@ -42,7 +46,7 @@ def add(object_path: str) -> None:
     print(f'Successfully updated {object_path}')
 
 
-def insert_hash_object(tree: Tree, hash_object: HashObject, path_parts: iter)\
+def insert_hash_object(tree: Tree, hash_object: HashObject, path_parts: iter) \
         -> Tree:
     if not path_parts:
         tree = hash_object

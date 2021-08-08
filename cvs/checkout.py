@@ -36,13 +36,13 @@ def checkout(ref_name: str) -> None:
     try:
         tree = read_tree(tree_hash)
     except FileNotFoundError:
-        print(f'The tree hash {tree_hash} does not exist.')
+        print(f'The tree {tree_hash} does not exist.')
         return
     clean_directory('.')
     unload_tree(tree, '.')
     try:
         index_path.write_text(tree_hash)
     except FileNotFoundError:
-        print('CVS index does not exist.')
+        print('Index file does not exist.')
         return
     print(f'Successful checkout to {ref_name}')

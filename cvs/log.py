@@ -20,7 +20,7 @@ def log():
         try:
             commit_text = (commits_path / commit_hash).read_text()
         except FileNotFoundError:
-            print(f'Commit with {commit_hash} hash does not exist.')
+            print(f'Commit {commit_hash} does not exist.')
             return
         commit_match = COMMIT_REGEX.match(commit_text)
         try:
@@ -29,5 +29,5 @@ def log():
                   f'{commit_match.group("message")}\n')
             commit_hash = get_commit_parent_hash(commit_hash)
         except AttributeError:
-            print(f'Commit with {commit_hash} hash does not match the format.')
+            print(f'{commit_hash} file does not match the commit format.')
             return
