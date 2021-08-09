@@ -7,6 +7,7 @@ from cvs.checkout import checkout
 from cvs.init import init
 from cvs.commit import commit, commit_list
 from cvs.log import log
+from cvs.rm import rm
 from cvs.status import status
 from cvs.tag import tag, tag_list
 
@@ -31,7 +32,10 @@ def parse_arguments():
                         help='show history of current commit')
     parser.add_argument('-add',
                         metavar='path',
-                        help='updates file or folder in cvs index')
+                        help='add file or folder in cvs index')
+    parser.add_argument('-rm',
+                        metavar='path',
+                        help='remove file or folder in cvs index')
     parser.add_argument('-commit',
                         metavar='message',
                         help='commit changes')
@@ -78,6 +82,8 @@ def main():
             branch_list()
         elif args_dict['add']:
             add(args_dict['add'])
+        elif args_dict['rm']:
+            rm(args_dict['rm'])
         elif args_dict['commit']:
             commit(args_dict['commit'])
         elif args_dict['checkout']:
