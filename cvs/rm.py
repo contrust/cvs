@@ -6,9 +6,9 @@ from cvs.hash_object import Tree
 from cvs.read_tree import read_tree
 
 
-def remove_tree_object(tree, path_parts):
+def remove_tree_object(tree, path_parts) -> None:
     if not path_parts:
-        tree = Tree()
+        tree.children = {}
     elif len(path_parts) == 1:
         del tree.children[path_parts[0]]
     else:

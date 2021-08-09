@@ -66,35 +66,31 @@ def main():
     """
     Process parsed console arguments and run server.
     """
-    try:
-        args_dict = vars(parse_arguments())
-        if args_dict['init']:
-            init()
-        elif args_dict['status']:
-            status()
-        elif args_dict['log']:
-            log()
-        elif args_dict['commit_list']:
-            commit_list()
-        elif args_dict['tag_list']:
-            tag_list()
-        elif args_dict['branch_list']:
-            branch_list()
-        elif args_dict['add']:
-            add(args_dict['add'])
-        elif args_dict['rm']:
-            rm(args_dict['rm'])
-        elif args_dict['commit']:
-            commit(args_dict['commit'])
-        elif args_dict['checkout']:
-            checkout(args_dict['checkout'])
-        elif args_dict['tag']:
-            tag(args_dict['tag'][0], args_dict['tag'][1])
-        elif args_dict['branch']:
-            create_branch(args_dict['branch'])
-    except Exception as e:
-        print(f"{type(e).__name__} at line"
-              f" {e.__traceback__.tb_lineno} of {__file__}: {e}")
+    args_dict = vars(parse_arguments())
+    if args_dict['init']:
+        init()
+    elif args_dict['status']:
+        status()
+    elif args_dict['log']:
+        log()
+    elif args_dict['commit_list']:
+        commit_list()
+    elif args_dict['tag_list']:
+        tag_list()
+    elif args_dict['branch_list']:
+        branch_list()
+    elif args_dict['add']:
+        add(args_dict['add'])
+    elif args_dict['rm']:
+        rm(args_dict['rm'])
+    elif args_dict['commit']:
+        commit(args_dict['commit'])
+    elif args_dict['checkout']:
+        checkout(args_dict['checkout'])
+    elif args_dict['tag']:
+        tag(args_dict['tag'][0], args_dict['tag'][1])
+    elif args_dict['branch']:
+        create_branch(args_dict['branch'])
 
 
 if __name__ == '__main__':

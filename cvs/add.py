@@ -48,9 +48,9 @@ def add(object_path: str) -> None:
 
 
 def insert_hash_object(tree: Tree, hash_object: HashObject, path_parts: tuple) \
-        -> Tree:
+        -> None:
     if not path_parts:
-        tree = hash_object
+        tree.children = hash_object.children
     elif len(path_parts) == 1:
         tree.children[path_parts[0]] = hash_object
     else:
