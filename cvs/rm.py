@@ -34,7 +34,7 @@ def rm(object_path: str) -> None:
         return
     try:
         remove_tree_object(index_tree, Path(object_path).parts)
-    except KeyError:
+    except (KeyError, AttributeError):
         print(f'There is no directory or file in index with {object_path} path')
         return
     except FileNotFoundError:
