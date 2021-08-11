@@ -26,7 +26,7 @@ def tag(name: str, message: str) -> None:
         except FileNotFoundError:
             print(f'Branch {head_content} does not exist.')
             return
-        if not is_commit_exist(branch_content):
+        if not (branch_content and is_commit_exist(branch_content)):
             print(f'Branch {head_content} does not '
                   f'attached to any existing commit.')
             return
