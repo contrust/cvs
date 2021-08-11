@@ -41,7 +41,8 @@ class Tree(HashObject):
         return b'\n'.join([f'{child.__class__.__name__} '
                            f'{child.update_hash()} '
                            f'{child_name}'.encode('utf-8')
-                           for child_name, child in sorted(self.children.items())])
+                           for child_name, child in
+                           sorted(self.children.items())])
 
 
 class Blob(HashObject):
