@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 from cvs.hash_object import Tree, Blob
