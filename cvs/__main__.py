@@ -68,7 +68,10 @@ def main():
     """
     args_dict = vars(parse_arguments())
     if args_dict['init']:
-        init()
+        try:
+            init()
+        except FileNotFoundError:
+            print('Some files or directories were removed while init.')
     elif args_dict['status']:
         status()
     elif args_dict['log']:
