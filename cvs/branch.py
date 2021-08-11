@@ -34,4 +34,4 @@ def branch_list():
 
 
 def is_branch_exist(branch_name: str) -> bool:
-    return os.path.exists(str(heads_refs_path / branch_name))
+    return (heads_refs_path / branch_name).exists()

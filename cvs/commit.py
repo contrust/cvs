@@ -60,7 +60,7 @@ def commit_list():
 
 
 def is_commit_exist(commit_hash: str) -> bool:
-    return os.path.exists(str(commits_path / commit_hash))
+    return (commits_path / commit_hash).exists()
 
 
 def get_commit_tree_hash(commit_hash: str) -> str:

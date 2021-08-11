@@ -57,7 +57,7 @@ def tag_list():
 
 
 def is_tag_exist(tag_name: str) -> bool:
-    return os.path.exists(str(tags_refs_path / tag_name))
+    return (tags_refs_path / tag_name).exists()
 
 
 def get_tag_commit_hash(tag_name: str) -> str:
