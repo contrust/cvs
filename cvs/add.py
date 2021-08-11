@@ -13,13 +13,16 @@ def add(object_path: str) -> None:
         print('You are trying to add object outside of the working directory.')
         return
     if os.path.isfile(object_path):
-        with open(object_path, mode='rb') as blob_file:
-            add_object = Blob(blob_file.read())
+        try:
+            with open(object_path, mode='rb') as blob_file:
+                add_object = Blob(blob_file.read())
+        except FileNotFoundError:
+            print(f'Can not open {object_path}')
     elif os.path.isdir(object_path):
         try:
             add_object = create_tree(object_path)
         except FileNotFoundError:
-            print('Blobs folder does not exist.')
+            print(f'Can not create tree for {object_path}')
             return
     else:
         print(f'There is no directory or file with {object_path} path')
@@ -47,8 +50,8 @@ def add(object_path: str) -> None:
     print(f'Successfully updated {object_path}')
 
 
-def insert_hash_object(tree: Tree, hash_object: HashObject, path_parts: tuple) \
-        -> None:
+def insert_hash_object(tree: Tree, hash_object: HashObject,
+                       path_parts: tuple) -> None:
     if not path_parts:
         tree.children = hash_object.children
     elif len(path_parts) == 1:
