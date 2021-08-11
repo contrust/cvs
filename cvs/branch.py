@@ -35,9 +35,3 @@ def branch_list():
 
 def is_branch_exist(branch_name: str) -> bool:
     return os.path.exists(str(heads_refs_path / branch_name))
-
-
-def get_branch_content(branch_name: str) -> str:
-    with open(str(heads_refs_path / branch_name)) as branch_file:
-        branch_content = branch_file.read()
-        return branch_content
