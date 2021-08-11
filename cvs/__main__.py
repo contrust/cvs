@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 import argparse
+import os
 
 from cvs.add import add
 from cvs.branch import create_branch, branch_list
 from cvs.checkout import checkout
+from cvs.config import cvs_directory_path
 from cvs.init import init
 from cvs.commit import commit, commit_list
 from cvs.log import log
@@ -72,6 +74,8 @@ def main():
             init()
         except FileNotFoundError:
             print('Some files or directories were removed while init.')
+    elif not os.path.exists(str(cvs_directory_path)):
+        print('CVS is not inited.')
     elif args_dict['status']:
         status()
     elif args_dict['log']:
