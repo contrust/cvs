@@ -4,9 +4,9 @@ from datetime import datetime, timezone
 from hashlib import sha1
 from pathlib import Path
 
-from cvs.branch import is_branch_exist, get_branch_content
+from cvs.branch import is_branch_exist
 from cvs.config import head_path, index_path, trees_path, \
-    blobs_path, commits_path, tags_path
+    blobs_path, commits_path, tags_path, heads_refs_path
 
 
 def get_hash(data: bytes) -> str:
@@ -61,7 +61,7 @@ class Commit(HashObject):
 
     def __bytes__(self) -> bytes:
         head_content = head_path.read_text()
-        parent_hash = (get_branch_content(head_content)
+        parent_hash = ((heads_refs_path / head_content).read_text()
                        if is_branch_exist(head_content) else head_content)
         tree_hash = index_path.read_text()
         return f'Tree: {tree_hash}\n' \
@@ -78,7 +78,7 @@ class Tag(HashObject):
 
     def __bytes__(self):
         head_content = head_path.read_text()
-        commit_hash = (get_branch_content(head_content)
+        commit_hash = ((heads_refs_path / head_content).read_text()
                        if is_branch_exist(head_content) else head_content)
         return f'Commit: {commit_hash}\n' \
                f'Date: {self.time}\n\n' \

@@ -1,6 +1,6 @@
-from cvs.branch import get_branch_content, is_branch_exist
+from cvs.branch import is_branch_exist
 from cvs.commit import get_commit_parent_hash
-from cvs.config import commits_path, head_path
+from cvs.config import commits_path, head_path, heads_refs_path
 from cvs.commit import COMMIT_REGEX
 
 
@@ -11,7 +11,7 @@ def log():
         print('Head file does not exist.')
         return
     try:
-        commit_hash = (get_branch_content(head_content)
+        commit_hash = ((heads_refs_path / head_content).read_text()
                        if is_branch_exist(head_content) else head_content)
     except FileNotFoundError:
         print(f'Branch {head_content} does not exist.')
