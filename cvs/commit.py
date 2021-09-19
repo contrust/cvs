@@ -30,8 +30,7 @@ def commit(message: str) -> None:
     except FileNotFoundError:
         print('Head file does not exist.')
         return
-    if (is_branch_exist(branch_name) or
-            branch_name == 'main' and not os.listdir(str(heads_refs_path))):
+    if is_branch_exist(branch_name) and branch_name:
         try:
             (heads_refs_path / branch_name).write_text(commit_hash)
         except FileNotFoundError:

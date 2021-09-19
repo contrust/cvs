@@ -50,10 +50,15 @@ def checkout(ref_name: str) -> None:
     else:
         print('There is no commit, tag or branch with such name.')
         return
-    try:
-        tree_hash = get_commit_tree_hash(commit_hash)
-    except AttributeError:
-        print(f'{commit_hash} file does not match the format.')
+    if is_commit_exist(commit_hash) and commit_hash:
+        try:
+            tree_hash = get_commit_tree_hash(commit_hash)
+        except AttributeError:
+            print(f'{commit_hash} file does not match the format.')
+            return
+    else:
+        print('Can not checkout '
+              'because name does not refers to existing commit.')
         return
     try:
         tree = read_tree(tree_hash)
