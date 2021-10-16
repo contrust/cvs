@@ -4,6 +4,7 @@ import re
 from cvs.branch import is_branch_exist
 from cvs.config import commits_path, heads_refs_path, index_path, head_path
 from cvs.hash_object import Commit
+from cvs.tree_diff import get_trees_diff
 
 COMMIT_REGEX = re.compile(r'^Tree: (?P<tree_hash>\w{40})\n'
                           r'Parent: (?P<parent_hash>(\w{40})?)\n'
@@ -12,6 +13,13 @@ COMMIT_REGEX = re.compile(r'^Tree: (?P<tree_hash>\w{40})\n'
 
 
 def commit(message: str) -> None:
+    head_content = head_path.read_text()
+    if not is_commit_exist(head_content):
+        if is_branch_exist(head_content):
+            head_content = (heads_refs_path / head_content).read_text()
+        else:
+            print('Head points to not existing branch or commit.')
+            return
     try:
         index_content = index_path.read_text()
     except FileNotFoundError:
@@ -20,6 +28,11 @@ def commit(message: str) -> None:
     if not index_content:
         print('Can not commit empty repository.')
         return
+    if head_content:
+        head_tree_hash = get_commit_tree_hash(head_content)
+        if head_tree_hash == index_content:
+            print('There has not been done any changes after current commit.')
+            return
     try:
         commit_hash = Commit(message).update_hash()
     except FileNotFoundError:
