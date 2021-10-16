@@ -13,7 +13,7 @@ def read_tree(tree_hash: str) -> Tree:
         for line in tree_file:
             match = TREE_LINE_REGEX.match(line.strip())
             if match.group('type') == 'Blob':
-                child_blob = Blob((blobs_path / match.group('hash'))
+                child_blob = Blob(data=(blobs_path / match.group('hash'))
                                   .read_bytes())
                 tree.children[match.group('name')] = child_blob
             elif match.group('type') == 'Tree':
