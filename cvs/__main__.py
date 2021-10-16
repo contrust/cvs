@@ -9,6 +9,7 @@ from cvs.init import init
 from cvs.commit import commit, commit_list
 from cvs.log import log
 from cvs.rm import rm
+from cvs.diff import diff
 from cvs.status import status
 from cvs.tag import tag, tag_list
 
@@ -37,6 +38,10 @@ def parse_arguments():
     parser.add_argument('-rm',
                         metavar='path',
                         help='remove file or folder in cvs index')
+    parser.add_argument('-diff',
+                        metavar=('name', 'message'),
+                        help='show changed files',
+                        nargs=2)
     parser.add_argument('-commit',
                         metavar='message',
                         help='commit changes')
@@ -89,6 +94,8 @@ def main():
         add(args_dict['add'])
     elif args_dict['rm']:
         rm(args_dict['rm'])
+    elif args_dict['diff']:
+        diff(args_dict['diff'][0], args_dict['diff'][1])
     elif args_dict['commit']:
         commit(args_dict['commit'])
     elif args_dict['checkout']:
