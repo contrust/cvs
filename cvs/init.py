@@ -1,4 +1,4 @@
-from cvs.config import cvs_directory_path, objects_path, blobs_path,\
+from cvs.config import repository_path, cvs_directory_path, objects_path, blobs_path,\
     trees_path, commits_path, refs_path, tags_path, tags_refs_path,\
     heads_refs_path, index_path, head_path
 
