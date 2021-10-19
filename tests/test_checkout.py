@@ -53,3 +53,15 @@ def test_repository_files_changes_after_checkout(create_two_files):
     assert 'test1.txt' in listdir
     assert '.cvs' in listdir
     assert len(listdir) == 2
+
+
+def test_checkout_changes_head_file(create_two_files):
+    add('test1.txt')
+    commit_hash1 = commit('')
+    add('test2.txt')
+    commit('')
+    head_content = head_path.read_text()
+    assert head_content == 'main'
+    checkout(commit_hash1)
+    head_content = head_path.read_text()
+    assert head_content == commit_hash1
