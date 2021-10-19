@@ -29,31 +29,31 @@ def log():
             print('\033[34m' + f'commit {commit_hash}' + '\033[0m\n' +
                   f'\033[31mDate: {commit_match.group("date")}\n\n\033[0m'
                   f'{commit_match.group("message")}\n')
-            past_commit_hash = commit_hash
-            commit_hash = get_commit_parent_hash(commit_hash)
-            print('\033[35m' + 'Changed files:\n' + '\033[0m')
-            if commit_hash:
-                tree_hash1 = get_commit_tree_hash(commit_hash)
-                tree_hash2 = get_commit_tree_hash(past_commit_hash)
-                tree1 = read_tree(tree_hash1)
-                tree2 = read_tree(tree_hash2)
-                only_index_tree, only_commit_tree = get_trees_diff(tree1,
-                                                                   tree2)
-                left_dict = {x: y for x, y in
-                             get_tree_children_names(only_index_tree)}
-                right_dict = {x: y for x, y in
-                              get_tree_children_names(only_commit_tree)}
-                names_of_changed = sorted(list(set(left_dict.keys()).union(
-                        set(right_dict.keys()))))
-            else:
-                past_tree_hash = get_commit_tree_hash(past_commit_hash)
-                comparison_tree = read_tree(past_tree_hash)
-                names_of_changed = sorted(list(map(lambda x: x[0],
-                                                   get_tree_children_names(
-                                                       comparison_tree))))
-            for name in names_of_changed:
-                print(name)
         except AttributeError:
             print(f'{commit_hash} file does not match the commit format.')
             return
+        past_commit_hash = commit_hash
+        commit_hash = get_commit_parent_hash(commit_hash)
+        print('\033[35m' + 'Changed files:\n' + '\033[0m')
+        if commit_hash:
+            tree_hash1 = get_commit_tree_hash(commit_hash)
+            tree_hash2 = get_commit_tree_hash(past_commit_hash)
+            tree1 = read_tree(tree_hash1)
+            tree2 = read_tree(tree_hash2)
+            only_index_tree, only_commit_tree = get_trees_diff(tree1,
+                                                               tree2)
+            left_dict = {x: y for x, y in
+                         get_tree_children_names(only_index_tree)}
+            right_dict = {x: y for x, y in
+                          get_tree_children_names(only_commit_tree)}
+            names_of_changed = sorted(list(set(left_dict.keys()).union(
+                    set(right_dict.keys()))))
+        else:
+            past_tree_hash = get_commit_tree_hash(past_commit_hash)
+            comparison_tree = read_tree(past_tree_hash)
+            names_of_changed = sorted(list(map(lambda x: x[0],
+                                               get_tree_children_names(
+                                                   comparison_tree))))
+        for name in names_of_changed:
+            print(name)
         print()
