@@ -1,4 +1,5 @@
 from cvs.config import *
+from cvs.init import init
 
 
 def test_files_were_created_after_init():
@@ -14,3 +15,8 @@ def test_files_were_created_after_init():
     assert refs_path.exists()
     assert tags_refs_path.exists()
     assert heads_refs_path.exists()
+
+
+def test_can_not_init_if_cvs_is_already_inited(capsys):
+    init()
+    assert capsys.readouterr().out == 'CVS is already inited.\n'

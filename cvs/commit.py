@@ -75,15 +75,22 @@ def is_commit_exist(commit_hash: str) -> bool:
     return (commits_path / commit_hash).exists()
 
 
-def get_commit_tree_hash(commit_hash: str) -> str:
+def get_commit_regex_match(commit_hash: str):
     commit_text = (commits_path / commit_hash).read_text()
     commit_match = COMMIT_REGEX.match(commit_text)
-    tree_hash = commit_match.group('tree_hash')
-    return tree_hash
+    return commit_match
+
+
+def get_commit_message(commit_hash: str) -> str:
+    commit_match = get_commit_regex_match(commit_hash)
+    return commit_match.group('message')
+
+
+def get_commit_tree_hash(commit_hash: str) -> str:
+    commit_match = get_commit_regex_match(commit_hash)
+    return commit_match.group('tree_hash')
 
 
 def get_commit_parent_hash(commit_hash: str) -> str:
-    commit_text = (commits_path / commit_hash).read_text()
-    commit_match = COMMIT_REGEX.match(commit_text)
-    parent_hash = commit_match.group('parent_hash')
-    return parent_hash
+    commit_match = get_commit_regex_match(commit_hash)
+    return commit_match.group('parent_hash')

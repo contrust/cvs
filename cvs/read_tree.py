@@ -4,7 +4,7 @@ import re
 
 TREE_LINE_REGEX = re.compile(r'(?P<type>(Blob|Tree)) '
                              r'(?P<hash>\w{40}) '
-                             r'(?P<name>\w+)')
+                             r'(?P<name>.+)')
 
 
 def read_tree(tree_hash: str) -> Tree:

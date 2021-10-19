@@ -25,7 +25,7 @@ def create_two_files():
 
 
 @pytest.fixture(scope="function")
-def create_directory_with_two_files():
+def create_dir_with_two_files():
     (repository_path / 'test_dir').mkdir()
     (repository_path / 'test_dir' / 'test1.txt').write_text('')
     (repository_path / 'test_dir' / 'test2.txt').write_text('')
