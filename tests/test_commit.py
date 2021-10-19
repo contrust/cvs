@@ -3,7 +3,13 @@ from cvs.add import add
 from cvs.commit import *
 
 
-def test_commit_file_matches_regular_expression(create_two_files,
+def test_commit_file_is_created_after_committing(create_two_files):
+    add('test1.txt')
+    commit_hash = commit('')
+    assert is_commit_exist(commit_hash)
+
+
+def test_commit_file_content_matches_regex(create_two_files,
                                                 create_dir_with_two_files):
     add('.')
     commit_hash = commit('')
@@ -47,3 +53,12 @@ def test_commit_file_contain_given_message(create_two_files):
     commit_hash = commit('test message')
     message = get_commit_message(commit_hash)
     assert message == 'test message'
+
+
+def test_commit_changes_main_branch_content(create_two_files):
+    add('test1.txt')
+    main_content1 = (heads_refs_path / 'main').read_text()
+    commit_hash = commit('')
+    main_content2 = (heads_refs_path / 'main').read_text()
+    assert main_content1 != main_content2
+    assert main_content2 == commit_hash

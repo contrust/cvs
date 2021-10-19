@@ -11,7 +11,7 @@ TAG_REGEX = re.compile(r'^Commit: (?P<commit_hash>\w{40})\n'
                        r'(?P<message>.*)$', re.DOTALL | re.MULTILINE)
 
 
-def tag(name: str, message: str) -> None:
+def tag(name: str, message: str) -> str:
     if is_tag_exist(name):
         print(f'The tag {name} already exists.')
         return
@@ -41,6 +41,7 @@ def tag(name: str, message: str) -> None:
         print('Tags folder does not exist.')
         return
     print(f'The tag {name} was successfully created.')
+    return tag_hash
 
 
 def tag_list():
