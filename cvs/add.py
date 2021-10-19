@@ -10,7 +10,7 @@ from cvs.read_tree import read_tree
 def add(object_path: str) -> None:
     object_path = os.path.relpath(object_path)
     if object_path.startswith('..'):
-        print('You are trying to add object outside of the working directory.')
+        print('Can not add object outside of the working directory.')
         return
     if os.path.isfile(object_path):
         try:

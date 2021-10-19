@@ -4,7 +4,6 @@ import re
 from cvs.branch import is_branch_exist
 from cvs.config import commits_path, heads_refs_path, index_path, head_path
 from cvs.hash_object import Commit
-from cvs.tree_diff import get_trees_diff
 
 COMMIT_REGEX = re.compile(r'^Tree: (?P<tree_hash>\w{40})\n'
                           r'Parent: (?P<parent_hash>(\w{40})?)\n'
@@ -12,7 +11,7 @@ COMMIT_REGEX = re.compile(r'^Tree: (?P<tree_hash>\w{40})\n'
                           r'(?P<message>.*)$', re.DOTALL | re.MULTILINE)
 
 
-def commit(message: str) -> None:
+def commit(message: str) -> str:
     head_content = head_path.read_text()
     if not is_commit_exist(head_content):
         if is_branch_exist(head_content):
@@ -56,6 +55,7 @@ def commit(message: str) -> None:
             print('Head file does not exist.')
             return
     print(f'Successful commit {commit_hash}')
+    return commit_hash
 
 
 def commit_list():

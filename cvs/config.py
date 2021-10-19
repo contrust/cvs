@@ -1,6 +1,6 @@
 from pathlib import Path
 
-repository_path = Path('.').absolute()
+repository_path = Path('.')
 cvs_directory_path = repository_path / '.cvs'
 objects_path = cvs_directory_path / 'objects'
 blobs_path = objects_path / 'blobs'
