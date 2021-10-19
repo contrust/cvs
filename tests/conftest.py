@@ -3,6 +3,8 @@ import os
 import shutil
 from cvs.config import *
 from cvs.init import init
+from cvs.add import add
+from cvs.commit import commit
 
 
 @pytest.fixture(autouse=True, scope="function")
@@ -29,3 +31,9 @@ def create_dir_with_two_files():
     (repository_path / 'test_dir').mkdir()
     (repository_path / 'test_dir' / 'test1.txt').write_text('')
     (repository_path / 'test_dir' / 'test2.txt').write_text('')
+
+
+@pytest.fixture(scope="function")
+def make_test1_commit(create_two_files):
+    add('test1.txt')
+    commit('')
