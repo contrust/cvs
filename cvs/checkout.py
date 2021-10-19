@@ -48,7 +48,7 @@ def checkout(ref_name: str) -> None:
             print('Head file does not exist.')
             return
     else:
-        print('There is no commit, tag or branch with such name.')
+        print(f'There is no commit, tag or branch with {ref_name} name.')
         return
     if is_commit_exist(commit_hash) and commit_hash:
         try:
