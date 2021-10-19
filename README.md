@@ -28,6 +28,11 @@ pip install .
 | python3 -m cvs --tag-list | Show all tag names |
 | python3 -m cvs --branch-list | Show all branch names |
 
+## Run tests
+
+```sh
+pytest
+```
 ## Author
 
 👤 **Artyom Borisov**
