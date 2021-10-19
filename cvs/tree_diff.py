@@ -17,12 +17,16 @@ def get_trees_diff(tree1: Tree, tree2: Tree) -> list:
         elif name not in tree2.children:
             left_only.children[name] = tree1.children[name]
         else:
-            if tree1.children[name].update_hash() != tree2.children[name].update_hash():
-                if type(tree1.children[name]) != type(tree1.children[name]) or isinstance(tree1.children[name], Blob):
+            if (tree1.children[name].update_hash() !=
+                    tree2.children[name].update_hash()):
+                if (isinstance(tree1.children[name], Tree) and
+                        isinstance(tree1.children[name], Blob) or
+                        isinstance(tree1.children[name], Blob)):
                     left_only.children[name] = tree1.children[name]
                     right_only.children[name] = tree2.children[name]
                 else:
-                    sub_left_only, sub_right_only = get_trees_diff(tree1.children[name], tree2.children[name])
+                    sub_left_only, sub_right_only = get_trees_diff(
+                        tree1.children[name], tree2.children[name])
                     left_only.children[name] = sub_left_only
                     right_only.children[name] = sub_right_only
     return [left_only, right_only]

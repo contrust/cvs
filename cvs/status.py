@@ -35,6 +35,6 @@ def status():
     only_index_tree, only_commit_tree = get_trees_diff(tree1, tree2)
     left_dict = {x: y for x, y in get_tree_children_names(only_index_tree)}
     right_dict = {x: y for x, y in get_tree_children_names(only_commit_tree)}
-    for name in sorted(list(set(left_dict.keys()).union(set(right_dict.keys())))):
+    for name in sorted(list(
+            set(left_dict.keys()).union(set(right_dict.keys())))):
         print(name)
-

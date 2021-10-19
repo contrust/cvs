@@ -41,4 +41,3 @@ def test_print_successfully_removed_if_remove_existed_object(capsys,
     capsys.readouterr()
     rm('test1.txt')
     assert capsys.readouterr().out == f'Successfully removed test1.txt\n'
-
