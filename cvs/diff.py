@@ -1,12 +1,11 @@
 import difflib
-import os
-from pathlib import Path
-
-from cvs.hash_object import Tree, Blob
+from cvs.branch import is_branch_exist
+from cvs.color import colorize, PINK
+from cvs.hash_object import Blob
 from cvs.commit import get_commit_tree_hash, is_commit_exist
-from cvs.config import cvs_directory_path, repository_path
+from cvs.config import heads_refs_path, tags_refs_path
 from cvs.read_tree import read_tree
-from cvs.unload_tree import unload_tree
+from cvs.tag import is_tag_exist, get_tag_commit_hash
 from cvs.tree_diff import get_trees_diff, get_tree_children_names
 
 
@@ -16,31 +15,52 @@ def is_binary_string(string: bytes) -> bool:
     return bool(string.translate(None, chars))
 
 
-def diff(commit_hash1, commit_hash2):
-    for commit_hash in commit_hash1, commit_hash2:
-        if not is_commit_exist(commit_hash):
-            print(f'Commit with {commit_hash} hash does not exist.')
+def diff(ref_name1, ref_name2):
+    trees = []
+    for ref_name in ref_name1, ref_name2:
+        try:
+            commit_hash = get_commit_hash_by_ref_name(ref_name)
+        except AttributeError:
+            print(f'Can not parse tag {ref_name} file.')
             return
-    tree_hash1 = get_commit_tree_hash(commit_hash1)
-    tree_hash2 = get_commit_tree_hash(commit_hash2)
-    tree1 = read_tree(tree_hash1)
-    tree2 = read_tree(tree_hash2)
-    left_only, right_only = get_trees_diff(tree1, tree2)
+        if commit_hash is None:
+            print(f'There is no commit, branch or tag with {ref_name} name')
+            return
+        tree_hash = get_commit_tree_hash(commit_hash)
+        tree = read_tree(tree_hash)
+        trees.append(tree)
+    left_only, right_only = get_trees_diff(*trees)
     left_dict = {x: y for x, y in get_tree_children_names(left_only)}
     right_dict = {x: y for x, y in get_tree_children_names(right_only)}
     for name in sorted(list(
             set(left_dict.keys()).union(set(right_dict.keys())))):
         data1 = left_dict.get(name, Blob(data=b'')).data
         data2 = right_dict.get(name, Blob(data=b'')).data
-        if (not is_binary_string(data1) and not is_binary_string(data2) and
-                (data1 or data2)):
-            data1 = data1.decode('utf-8').splitlines()
-            data2 = data2.decode('utf-8').splitlines()
-            diff_lines = list(difflib.unified_diff(data1, data2, name, name))
-            print('\033[35m' + name + '\033[0m')
-            for i in diff_lines[2:]:
-                print(('\033[32m' if i.startswith('+') else
-                       ('\033[31m' if i.startswith('-') else '')) +
-                      i + '\033[0m')
-            print()
+        if data1 or data2:
+            if not is_binary_string(data1) and not is_binary_string(data2):
+                data1, data2 = map(
+                    lambda x: x.decode('utf-8').splitlines(), [data1, data2])
+                diff_lines = list(difflib.unified_diff(data1, data2,
+                                                       name, name))
+                print(colorize(name, PINK))
+                for i in diff_lines[2:]:
+                    print(('\033[32m' if i.startswith('+') else
+                           ('\033[31m' if i.startswith('-') else '')) +
+                          i + '\033[0m')
+                print()
+            else:
+                print(f'{colorize(name, PINK)} binary file size '
+                      f'was changed from {len(data1)} to {len(data2)} bytes\n')
     print(end="")
+
+
+def get_commit_hash_by_ref_name(name: str) -> str:
+    if is_commit_exist(name):
+        return name
+    if is_branch_exist(name):
+        commit_hash = (heads_refs_path / name).read_text()
+        return commit_hash
+    if is_tag_exist(name):
+        commit_hash = get_tag_commit_hash(name)
+        return commit_hash
+    return None
