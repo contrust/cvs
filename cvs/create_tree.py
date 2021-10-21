@@ -1,5 +1,4 @@
 import os
-
 from cvs.hash_object import Blob, Tree
 
 

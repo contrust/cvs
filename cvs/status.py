@@ -1,4 +1,6 @@
 import sys
+
+from cvs.color import colorize, BLUE, PINK
 from cvs.hash_object import Tree
 from cvs.read_tree import read_tree
 from cvs.branch import is_branch_exist
@@ -15,14 +17,14 @@ def status():
         print('Head file does not exist.')
         return
     if is_branch_exist(head_content):
-        print('\033[34m' + f'On {head_content} branch' + '\033[0m')
+        print(colorize(f'On {head_content} branch', BLUE))
         head_content = (heads_refs_path / head_content).read_text()
     elif is_commit_exist(head_content):
-        print('\033[34m' + f'On {head_content} commit' + '\033[0m')
+        print(colorize(f'On {head_content} commit', BLUE))
     else:
         print('The head file stores not appropriate data.')
         sys.exit(1)
-    print('\033[35m' + '\nChanged files:\n' + '\033[0m')
+    print(colorize('\nChanged files:\n', PINK))
     index_tree_hash = index_path.read_text()
     if not index_tree_hash:
         return

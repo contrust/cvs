@@ -1,5 +1,4 @@
 import os.path
-
 from cvs.config import heads_refs_path, head_path, commits_path
 
 

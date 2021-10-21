@@ -1,6 +1,5 @@
 import os.path
 import re
-
 from cvs.branch import is_branch_exist
 from cvs.config import commits_path, heads_refs_path, index_path, head_path
 from cvs.hash_object import Commit

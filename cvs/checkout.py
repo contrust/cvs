@@ -1,5 +1,4 @@
 from pathlib import Path
-
 from cvs.branch import is_branch_exist
 from cvs.clean_directory import clean_directory
 from cvs.commit import get_commit_tree_hash, is_commit_exist
