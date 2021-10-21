@@ -56,3 +56,16 @@ def test_status_shows_changed_files(capsys, create_two_files):
     capsys.readouterr()
     status()
     assert 'test1.txt' in capsys.readouterr().out
+
+
+def test_on_main_branch_after_init(capsys):
+    status()
+    assert 'On main branch' in capsys.readouterr().out
+
+
+def test_branch_name_changes_after_checkout(capsys, make_test1_commit):
+    create_branch('elo')
+    checkout('elo')
+    capsys.readouterr()
+    status()
+    assert 'On elo branch' in capsys.readouterr().out
