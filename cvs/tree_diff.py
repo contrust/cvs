@@ -1,11 +1,4 @@
-import difflib
-import os
-from pathlib import Path
-
 from cvs.hash_object import Tree, Blob
-from cvs.config import cvs_directory_path, repository_path
-from cvs.read_tree import read_tree
-from cvs.unload_tree import unload_tree
 
 
 def get_trees_diff(tree1: Tree, tree2: Tree) -> list:

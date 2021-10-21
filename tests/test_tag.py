@@ -1,6 +1,6 @@
 from cvs.tag import *
 from cvs.config import tags_path, tags_refs_path
-from cvs.add import add
+from cvs.modify import add
 from cvs.commit import commit
 
 

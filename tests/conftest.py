@@ -3,7 +3,7 @@ import os
 import shutil
 from cvs.config import *
 from cvs.init import init
-from cvs.add import add
+from cvs.modify import add
 from cvs.commit import commit
 
 

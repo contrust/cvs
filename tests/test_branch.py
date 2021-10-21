@@ -1,10 +1,7 @@
 import os
-
-import pytest
-
 from cvs.config import *
 from cvs.branch import *
-from cvs.add import add
+from cvs.modify import add
 from cvs.commit import commit
 from cvs.checkout import checkout
 

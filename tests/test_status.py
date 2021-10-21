@@ -1,10 +1,9 @@
 from cvs.config import repository_path
 
-from cvs.rm import rm
 from cvs.status import status
 from cvs.checkout import checkout
 from cvs.branch import create_branch
-from cvs.add import add
+from cvs.modify import add, rm
 from cvs.commit import commit
 
 

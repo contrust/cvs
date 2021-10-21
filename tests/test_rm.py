@@ -1,6 +1,6 @@
-from cvs.rm import *
-from cvs.add import add
+from cvs.modify import add, rm
 from cvs.config import *
+from cvs.read_tree import read_tree
 
 
 def test_only_given_path_is_removed(create_two_files):
@@ -15,7 +15,7 @@ def test_only_given_path_is_removed(create_two_files):
 def test_can_not_remove_object_outside_working_directory(capsys):
     rm('../test_rm.py')
     assert (capsys.readouterr().out ==
-            'You are trying to remove object '
+            'Can not modify object '
             'outside of the working directory.\n')
 
 
@@ -31,8 +31,8 @@ def test_all_files_is_removed_if_remove_current_working_directory(
 def test_can_not_remove_not_existing_object(capsys):
     rm('not_existing.txt')
     assert (capsys.readouterr().out ==
-            f'There is no directory or file '
-            f'in index with not_existing.txt path\n')
+            "Can not remove not_existing.txt "
+            "because there is no such path in index.\n")
 
 
 def test_print_successfully_removed_if_remove_existed_object(capsys,
