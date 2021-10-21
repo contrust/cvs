@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 import argparse
 
-from cvs.add import add
+from cvs.modify import add, rm
 from cvs.branch import create_branch, branch_list
 from cvs.checkout import checkout
 from cvs.config import cvs_directory_path
 from cvs.init import init
 from cvs.commit import commit, commit_list
 from cvs.log import log
-from cvs.rm import rm
 from cvs.diff import diff
 from cvs.status import status
 from cvs.tag import tag, tag_list
@@ -39,7 +38,7 @@ def parse_arguments():
                         metavar='path',
                         help='remove file or folder in cvs index')
     parser.add_argument('-diff',
-                        metavar=('name', 'message'),
+                        metavar=('commit1', 'commit2'),
                         help='show changed files',
                         nargs=2)
     parser.add_argument('-commit',
