@@ -1,5 +1,5 @@
-from cvs.modify import add
 from cvs.commit import *
+from cvs.modify import add
 
 
 def test_commit_file_is_created_after_committing(create_two_files):
@@ -9,7 +9,7 @@ def test_commit_file_is_created_after_committing(create_two_files):
 
 
 def test_commit_file_content_matches_regex(create_two_files,
-                                                create_dir_with_two_files):
+                                           create_dir_with_two_files):
     add('.')
     commit_hash = commit('')
     commit_file_content = (commits_path / commit_hash).read_text()

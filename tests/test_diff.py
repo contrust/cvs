@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from build.lib.cvs.commit import commit
+from cvs.commit import commit
 from cvs.diff import *
 from cvs.modify import add
 from cvs.config import repository_path
