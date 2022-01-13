@@ -33,8 +33,3 @@ pip install .
 ```sh
 pytest
 ```
-## Author
-
-👤 **Artyom Borisov**
-
-* Github: [@contrust](https://github.com/contrust)
