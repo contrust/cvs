@@ -1,4 +1,6 @@
-# cvs
+# CVS
+
+Local version control system implemented in Python.
 
 ## Install
 
